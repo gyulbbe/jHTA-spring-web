@@ -27,38 +27,133 @@
 		<tag/>
 		<url/>
 	</scm>
+	<!--
+		애플리케이션의 jdk 버전을 지정한다.
+	-->
 	<properties>
 		<java.version>21</java.version>
 	</properties>
+	<!--
+		애플리케이션 실행에 필요한 라이브러리 의존성을 지정한다.
+	-->
 	<dependencies>
+	<!--
+		spring mvc 기반의 웹 애플리케이션 개발에 필요한 starter 의존성 추가
+	-->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
 
+		<!--
+			애플리케이션 개발시 서버재시작 등의 기능을 지원하는 의존성 추가
+		-->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-devtools</artifactId>
 			<scope>runtime</scope>
 			<optional>true</optional>
 		</dependency>
+		<!--
+			내장형 톰캣을 지원하는 의존성 추가
+			+ spring boot가 제공하는 톰캣은 JSP를 지원하지 않는다.
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-tomcat</artifactId>
 			<scope>provided</scope>
 		</dependency>
+		-->
+		<!--
+			스프링 부트에서 JSP를 사용하기 위한 의존성 추가
+		-->
+		<dependency>
+		  <groupId>org.apache.tomcat.embed</groupId>
+		  <artifactId>tomcat-embed-jasper</artifactId>
+  		</dependency>
+  		<!--
+			서블릿 API 의존성 추가
+		-->
+		<dependency>
+		    <groupId>jakarta.servlet</groupId>
+		    <artifactId>jakarta.servlet-api</artifactId>
+		</dependency>
+		<!--
+			JSTL 의존성 추가
+		-->
+		<dependency>
+		    <groupId>org.glassfish.web</groupId>
+		    <artifactId>jakarta.servlet.jsp.jstl</artifactId>
+		</dependency>
+		<dependency>
+		    <groupId>jakarta.servlet.jsp.jstl</groupId>
+		    <artifactId>jakarta.servlet.jsp.jstl-api</artifactId>
+		</dependency>
+		<!--
+			스프링부트 애플리케이션 테스트에 필요한 starter 의존성 추가
+		-->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<!--
+			폼 입력값 유효성 검증에 필요한 의존성 추가
+		-->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-validation</artifactId>
+		</dependency>
+		<!--
+			mybatis를 이용한 데이터베이스 엑세스에 필요한 의존성 추가
+		-->
+		<dependency>
+			<groupId>org.mybatis.spring.boot</groupId>
+			<artifactId>mybatis-spring-boot-starter</artifactId>
+			<version>3.0.3</version>
+		</dependency>
+		<!--
+			오라클 데이터베이스 연결에 필요한 JDBC 드라이버 의존성 추가
+		-->
+		<dependency>
+			<groupId>com.oracle.database.jdbc</groupId>
+			<artifactId>ojdbc11</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+		<!--
+			생성자, Getter/Setter 메소드, toString 메소드, Builder등 자동으로 생성시키는 Lombok 의존성 추가
+		-->
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<optional>true</optional>
+		</dependency>
+		<!--
+			mybatis를 이용한 데이터베이스 엑세스 테스트에 필요한 의존성 추가
+		-->
+		<dependency>
+			<groupId>org.mybatis.spring.boot</groupId>
+			<artifactId>mybatis-spring-boot-starter-test</artifactId>
+			<version>3.0.3</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
 
 	<build>
 		<plugins>
+		<!--
+			메이븐 빌드 도구와 관련된 기능을 지원하는 플러그인
+		-->
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+					<excludes>
+						<exclude>
+							<groupId>org.projectlombok</groupId>
+							<artifactId>lombok</artifactId>
+						</exclude>
+					</excludes>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>
