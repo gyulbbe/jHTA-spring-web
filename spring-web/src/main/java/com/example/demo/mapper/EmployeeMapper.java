@@ -16,5 +16,5 @@ import com.example.demo.vo.Employee;
 public interface EmployeeMapper {
 	
 	Employee getEmployeeById(@Param("id") int no);
-	List<Employee> getAllEmployees();
+	List<Employee> getAllEmployees(@Param("deptId") int deptId);
 }

@@ -1,5 +1,7 @@
 package com.example.demo.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,5 +31,15 @@ public class EmployeeService {
 	public Employee getEmployeeDetail(int id) {
 		Employee employee = employeeMapper.getEmployeeById(id);
 		return employee;
+	}
+	
+	/**
+	 * 지정된 부서아이디에 소속된 직원목록정보를 제공하는 서비스 메소드다.
+	 * @param deptId 부서아이디
+	 * @return 부서아이디가 0이면 모든 직원정보를 반환하고, 그 외는 해당 부서의 직원정보를 반환한다.
+	 */
+	public List<Employee> getEmployees(int deptId) {
+		List<Employee> employees = employeeMapper.getAllEmployees(deptId);
+		return employees;
 	}
 }

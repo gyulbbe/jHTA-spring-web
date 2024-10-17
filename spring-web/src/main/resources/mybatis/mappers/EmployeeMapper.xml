@@ -19,7 +19,11 @@
 		where employee_id = #{id}
 	</select>
 	
-		
+	<!-- 
+		List<Employee> getAllEmployees(@Param("deptId") int deptId);
+			* deptId가 0인 경우 전체 조회다.
+			* deptId가 0이 아닌 경우 deptId에 해당하는 부서에 소속된 사원을 조회한다.
+	 -->
 	<select id="getAllEmployees" resultType="com.example.demo.vo.Employee">
 		select
 			employee_id as id
@@ -29,5 +33,12 @@
 			, job_id 			as jobId
 		from
 			employees
+			<where>
+				<if test="deptId != 0">
+					department_id = #{deptId}
+				</if>
+			</where>
+			order by
+				employee_id asc
 	</select>
 </mapper>
