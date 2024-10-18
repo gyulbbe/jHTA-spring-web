@@ -41,4 +41,49 @@
 			order by
 				employee_id asc
 	</select>
+	<!-- 
+		void insertEmployee(@Param("emp") Employee employee);
+	 -->
+	<insert id="insertEmployee">
+		insert into employees
+		(
+			employee_id
+			, first_name
+			, last_name
+			, email
+			, phone_number
+			, hire_date
+			, job_id
+			, salary
+			<if test="emp.commissionPct > 0">
+				, commission_pct
+			</if>
+			<if test="emp.managerId != 0">
+				, manager_id
+			</if>
+			<if test="emp.departmentId != 0">
+				, department_id
+			</if>
+		)
+		values
+		(
+			employees_seq.nextval
+			, #{emp.firstName}
+			, #{emp.lastName}
+			, #{emp.email}
+			, #{emp.phoneNumber}
+			, #{emp.hireDate}
+			, #{emp.jobId}
+			, #{emp.salary}
+			<if test="emp.commissionPct > 0">
+				, #{commission_pct}
+			</if>
+			<if test="emp.managerId != 0">
+				, #{manager_id}
+			</if>
+			<if test="emp.departmentId != 0">
+				, #{department_id}
+			</if>
+		)
+	</insert>
 </mapper>

@@ -55,6 +55,7 @@ public class EmployeeService {
 	public void addNewEmployee(EmployeeRegisterForm form) {
 		// Employee객체를 생성해서 EmployeeRegisterForm 객체의 값을 복사한다.
 		Employee employee = modelMapper.map(form, Employee.class);
+		employeeMapper.insertEmployee(employee);
 		System.out.println("직원정보: " + employee);
 	}
 }

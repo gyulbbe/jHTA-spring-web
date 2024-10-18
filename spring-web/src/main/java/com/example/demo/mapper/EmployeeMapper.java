@@ -17,4 +17,5 @@ public interface EmployeeMapper {
 	
 	Employee getEmployeeById(@Param("id") int no);
 	List<Employee> getAllEmployees(@Param("deptId") int deptId);
+	void insertEmployee(@Param("emp") Employee employee);
 }
