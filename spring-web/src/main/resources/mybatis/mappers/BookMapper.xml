@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.mapper.BookMapper">
+
+	<select id="getAllBooks" resultType="com.example.demo.vo.Book">
+		select 
+			BOOK_NO as no
+			, BOOK_TITLE as title
+			, BOOK_AUTHOR as author
+			, BOOK_PUBLISHER as publisher
+			, BOOK_PRICE as price
+			, BOOK_PUB_DATE as pubDate
+			, BOOK_STOCK as stock
+			, BOOK_DISCOUNT_PRICE as discountPrice
+		from TB_BOOKS
+	</select>
+
+	<select id="getBookByNo" resultType="com.example.demo.vo.Book">
+		select 
+			BOOK_NO as no
+			, BOOK_TITLE as title
+			, BOOK_AUTHOR as author
+			, BOOK_PUBLISHER as publisher
+			, BOOK_PRICE as price
+			, BOOK_PUB_DATE as pubDate
+			, BOOK_STOCK as stock
+			, BOOK_DISCOUNT_PRICE as discountPrice
+		from TB_BOOKS
+		where book_no = #{no}
+	</select>
+	
+	<insert id="insertBook">
+		insert into TB_BOOKS
+		(BOOK_NO
+			, BOOK_TITLE
+			, BOOK_AUTHOR
+			, BOOK_PUBLISHER
+			, BOOK_PRICE
+			, BOOK_PUB_DATE
+			, BOOK_STOCK
+			, BOOK_DISCOUNT_PRICE)
+		values
+		(TB_BOOKS_SEQ.nextval
+			, #{book.title}
+			, #{book.author}
+			, #{book.publisher}
+			, #{book.price}
+			, #{book.pubDate}
+			, #{book.stock}
+			, #{book.discountPrice})
+	</insert>
+</mapper>
