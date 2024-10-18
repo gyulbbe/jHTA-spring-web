@@ -31,6 +31,6 @@ public class Employee {
 	private String jobId;
 	private double salary;
 	private double commissionPct;
-	private int managerId;
-	private int departmentId;
+	private Integer managerId;
+	private Integer departmentId;
 }
