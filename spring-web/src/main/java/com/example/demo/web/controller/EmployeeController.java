@@ -6,9 +6,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.example.demo.form.EmployeeRegisterForm;
 import com.example.demo.service.EmployeeService;
 import com.example.demo.vo.Employee;
 
@@ -26,6 +28,37 @@ public class EmployeeController {
 	private EmployeeService employeeService;
 	
 	/*
+	 * 신규 직원 입력폼화면 요구 요청을 처리한다.
+	 * 요청 URL
+	 * 		http://localhost/employee/register
+	 * 요청 방식
+	 * 		GET
+	 */
+	@GetMapping("/register")
+	public String registerFrom() {
+		
+		return "emp/form"; // WEB-INF/views/emp/form.jsp
+	}
+	
+	/*
+	 * 신규 직원 등록 요청을 처리한다.
+	 * 요청 URL
+	 * 		http://localhost/employee/register
+	 * 요청 방식
+	 * 		POST
+	 */
+	@PostMapping("/register")
+	public String register(EmployeeRegisterForm form) {
+		System.out.println("입력 폼에서 전달한 값: " + form);
+		
+		// 폼 정보를 서비스에 전달해서 신규 직원으로 등록시킨다.
+		employeeService.addNewEmployee(form);
+		
+		return "redirect:/employee/list";
+	}
+	
+	/*
+	 * 사원상세정보 요청을 처리한다.
 	 * 요청 URL
 	 * 		http://localhost/employees/detail?id=100
 	 * 요청 파라미터

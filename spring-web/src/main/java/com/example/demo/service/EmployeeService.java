@@ -2,9 +2,11 @@ package com.example.demo.service;
 
 import java.util.List;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.example.demo.form.EmployeeRegisterForm;
 import com.example.demo.mapper.EmployeeMapper;
 import com.example.demo.vo.Employee;
 
@@ -22,6 +24,9 @@ public class EmployeeService {
 	
 	@Autowired
 	private EmployeeMapper employeeMapper;
+	
+	@Autowired
+	private ModelMapper modelMapper;
 	
 	/**
 	 * 지정된 사원 아이디에 해당하는 사원의 상세정보를 제공하는 서비스 메소드다.
@@ -41,5 +46,15 @@ public class EmployeeService {
 	public List<Employee> getEmployees(int deptId) {
 		List<Employee> employees = employeeMapper.getAllEmployees(deptId);
 		return employees;
+	}
+
+	/**
+	 * 신규 직원 정보를 전달받아서 등록하는 서비스 메소드다.
+	 * @param form 신규 직원정보가 포함된 객체
+	 */
+	public void addNewEmployee(EmployeeRegisterForm form) {
+		// Employee객체를 생성해서 EmployeeRegisterForm 객체의 값을 복사한다.
+		Employee employee = modelMapper.map(form, Employee.class);
+		System.out.println("직원정보: " + employee);
 	}
 }
