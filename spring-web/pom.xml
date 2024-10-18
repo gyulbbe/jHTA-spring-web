@@ -37,6 +37,14 @@
 		애플리케이션 실행에 필요한 라이브러리 의존성을 지정한다.
 	-->
 	<dependencies>
+		<!--
+			객체의 값을 다른 객체에 복사해주는 modelmapper 의존성 추가
+		-->
+		<dependency>
+		    <groupId>org.modelmapper</groupId>
+		    <artifactId>modelmapper</artifactId>
+		    <version>3.2.1</version>
+		</dependency>
 	<!--
 		spring mvc 기반의 웹 애플리케이션 개발에 필요한 starter 의존성 추가
 	-->
