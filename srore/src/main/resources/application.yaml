@@ -13,7 +13,7 @@ spring:
     username: hta
     password: zxcv1234
 ### spring mvc 설정
-  mvc:            # JSP 뷰페이지 경로 및 확장자를 정의한다.
+  mvc:  # JSP 뷰페이지 경로 및 확장자를 정의한다.
     view:
       prefix: /WEB-INF/views/
       suffix: .jsp
@@ -22,6 +22,7 @@ spring:
 mybatis:
   mapper-locations: # 매퍼파일 저장경로를 정의한다.
     - mybatis/mappers/*.xml
-  configuration:    # 기타 설정정보를 정의한다.
+  type-aliases-package: com.example.demo.vo
+  configuration:  # 기타 설정정보를 정의한다.
     jdbc-type-for-null: NULL
     log-impl: org.apache.ibatis.logging.log4j2.Log4j2Impl

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.mapper.ProductMapper">
+
+	<!-- List<Product> getProducts(); -->
+	<select id="getProducts" resultType="Product">
+		select
+			P.product_no as no
+			, P.product_name as name
+			, P.product_price as price
+			, P.product_discount_price as discountPrice
+			, C.category_no as "category.no"
+			, C.category_name as "category.name"
+		from
+			mall_products P, mall_categories C
+		where
+			P.category_no = C.category_no
+			<if test="condition.opt != null">
+				<choose>
+					<when test="condition.opt == 'name'">
+						and P.product_name like '%' || #{condition.value} || '%'
+					</when>
+					<when test="condition.opt == 'maker'">
+						and P.product_maker like '%' || #{condition.value} || '%'
+					</when>
+					<when test="condition.opt == 'minPrice'">
+						and P.product_price >= #{condition.value}
+					</when>
+					<when test="condition.opt == 'maxPrice'">
+						and P.product_price &lt;= #{condition.value}
+					</when>
+				</choose>
+			</if>
+		order by
+			P.product_no desc
+	</select>
+	
+	<!-- Product getProductByNo(@Param("no") int no); -->
+	<select id="getProductByNo" resultType="Product">
+		select
+			P.product_no as no
+			, P.product_name as name
+			, P.product_price as price
+			, P.product_discount_price as discountPrice
+			, P.product_maker as maker
+			, P.product_review_cnt as reviewCnt
+			, P.product_stock as stock
+			, P.product_sell as sell
+			, P.product_created_date as createdDate
+			, P.product_updated_date as updatedDate
+			, C.category_no as "category.no"
+			, C.category_name as "category.name"
+		from
+			mall_products P, mall_categories C
+		where
+			P.category_no = C.category_no
+		and
+			P.product_no = #{no}
+	</select>
+</mapper>
