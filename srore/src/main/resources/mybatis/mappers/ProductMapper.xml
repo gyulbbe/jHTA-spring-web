@@ -2,37 +2,78 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.demo.mapper.ProductMapper">
 
+	<!-- int getTotalRows(@Param("condition") Map<String, Object> condition); -->
+	<select id="getTotalRows" resultType="int">
+		select
+			count(*) as cnt
+		from
+			mall_products
+		<where>
+			<if test="condition.opt != null">
+					<choose>
+						<when test="condition.opt == 'name'">
+							product_name like '%' || #{condition.value} || '%'
+						</when>
+						<when test="condition.opt == 'maker'">
+							product_maker like '%' || #{condition.value} || '%'
+						</when>
+						<when test="condition.opt == 'minPrice'">
+							product_price >= #{condition.value}
+						</when>
+						<when test="condition.opt == 'maxPrice'">
+							product_price &lt;= #{condition.value}
+						</when>
+					</choose>
+				</if>
+			</where>
+	</select>
+
 	<!-- List<Product> getProducts(); -->
 	<select id="getProducts" resultType="Product">
 		select
-			P.product_no as no
-			, P.product_name as name
-			, P.product_price as price
-			, P.product_discount_price as discountPrice
-			, C.category_no as "category.no"
-			, C.category_name as "category.name"
-		from
-			mall_products P, mall_categories C
-		where
-			P.category_no = C.category_no
-			<if test="condition.opt != null">
+			*
+		from (
+			select
 				<choose>
-					<when test="condition.opt == 'name'">
-						and P.product_name like '%' || #{condition.value} || '%'
+					<when test="condition.sort == 'date'">
+						row_number() over (order by P.product_no desc) rn
 					</when>
-					<when test="condition.opt == 'maker'">
-						and P.product_maker like '%' || #{condition.value} || '%'
+					<when test="condition.sort == 'name'">
+						row_number() over (order by P.product_name asc) rn
 					</when>
-					<when test="condition.opt == 'minPrice'">
-						and P.product_price >= #{condition.value}
-					</when>
-					<when test="condition.opt == 'maxPrice'">
-						and P.product_price &lt;= #{condition.value}
+					<when test="condition.sort == 'price'">
+						row_number() over (order by P.product_price asc) rn
 					</when>
 				</choose>
-			</if>
-		order by
-			P.product_no desc
+				, P.product_no as no
+				, P.product_name as name
+				, P.product_price as price
+				, P.product_discount_price as discountPrice
+				, C.category_no as "category.no"
+				, C.category_name as "category.name"
+			from
+				mall_products P, mall_categories C
+			where
+				P.category_no = C.category_no
+				<if test="condition.opt != null">
+					<choose>
+						<when test="condition.opt == 'name'">
+							and P.product_name like '%' || #{condition.value} || '%'
+						</when>
+						<when test="condition.opt == 'maker'">
+							and P.product_maker like '%' || #{condition.value} || '%'
+						</when>
+						<when test="condition.opt == 'minPrice'">
+							and P.product_price >= #{condition.value}
+						</when>
+						<when test="condition.opt == 'maxPrice'">
+							and P.product_price &lt;= #{condition.value}
+						</when>
+					</choose>
+				</if>
+			)
+			where
+				rn between #{condition.begin} and #{condition.end}
 	</select>
 	
 	<!-- Product getProductByNo(@Param("no") int no); -->

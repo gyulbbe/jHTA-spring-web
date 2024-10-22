@@ -11,6 +11,7 @@ import com.example.demo.vo.Product;
 @Mapper
 public interface ProductMapper {
 
+	int getTotalRows(@Param("condition") Map<String, Object> condition);
 	List<Product> getProducts(@Param("condition") Map<String, Object> condition);
 	Product getProductByNo(@Param("no") int no);
 }
