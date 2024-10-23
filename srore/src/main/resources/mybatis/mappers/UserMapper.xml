@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.mapper.UserMapper">
+	<!-- 
+		User getUserByEmail(@Param("email") String eamil);
+		User getUserByNo(@Param("no") int no);
+	 -->
+	 <resultMap type="User" id="UserResultMap">
+	 	<id property="no" column="USER_NO" />
+	 	<result property="email" column="USER_EMAIL" />
+	 	<result property="password" column="USER_PASSWORD" />
+	 	<result property="nickname" column="USER_NICKNAME" />
+	 	<result property="tel" column="USER_TEL" />
+	 	<result property="enabled" column="USER_ENABLED" />
+	 	<result property="point" column="USER_POINT" />
+	 	<result property="createdDate" column="USER_CREATED_DATE" />
+	 	<result property="updatedDate" column="USER_UPDATED_DATE" />
+	 </resultMap>
+	 <select id="getUserByEmail" resultMap="UserResultMap">
+	 	select
+	 		*
+	 	from
+	 		spring_users
+	 	where
+	 		user_email = #{email}
+	 </select>
+	 <select id="getUserByNo" resultMap="UserResultMap">
+	 	select
+	 		*
+	 	from
+	 		spring_users
+	 	where
+	 		user_no = #{no}
+	 </select>
+	 
+	 <!-- void insertUser(@Param("user") User user); -->
+	 <insert id="insertUser">
+	 	<selectKey keyProperty="user.no" resultType="int" order="BEFORE">
+	 		select
+	 			users_seq.nextval
+	 		from
+	 			dual
+	 	</selectKey>
+	 	insert into spring_users
+	 	(user_no, user_email, user_password, user_nickname, user_tel)
+	 	values
+	 	(#{user.no}, #{user.email}, #{user.password}, #{user.nickname}, #{user.tel})
+	 </insert>
+	 
+	 <!-- void insertUserRole(@Param("userRole") UserRole userRole); -->
+	 <insert id="insertUserRole">
+	 	insert into spring_user_roles
+	 	(user_no, role_name)
+	 	values
+	 	(#{userRole.userNo}, #{userRole.roleName})
+	 </insert>
+</mapper>

@@ -7,7 +7,7 @@
 		select
 			count(*) as cnt
 		from
-			mall_products
+			spring_products
 		<where>
 			<if test="condition.opt != null">
 					<choose>
@@ -52,7 +52,7 @@
 				, C.category_no as "category.no"
 				, C.category_name as "category.name"
 			from
-				mall_products P, mall_categories C
+				spring_products P, spring_categories C
 			where
 				P.category_no = C.category_no
 				<if test="condition.opt != null">
@@ -92,7 +92,7 @@
 			, C.category_no as "category.no"
 			, C.category_name as "category.name"
 		from
-			mall_products P, mall_categories C
+			spring_products P, spring_categories C
 		where
 			P.category_no = C.category_no
 		and
