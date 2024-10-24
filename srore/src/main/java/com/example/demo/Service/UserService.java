@@ -3,6 +3,7 @@ package com.example.demo.Service;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.example.demo.dto.UserRegisterForm;
 import com.example.demo.exception.AlreadyUsedEmailException;
@@ -11,6 +12,7 @@ import com.example.demo.vo.User;
 import com.example.demo.vo.UserRole;
 
 @Service
+@Transactional
 public class UserService {
 
 	@Autowired
@@ -37,7 +39,17 @@ public class UserService {
 		
 		// 신규 회원의 권한정보를 테이블에 저장시킨다.
 		// 신규 회원은 ROLE_USER권한을 가진다.
-		UserRole userRole = new UserRole(user.getNo(), "ROLE_USER");
+//		UserRole userRole = new UserRole(user.getNo(), "ROLE_USER");
+//		userMapper.insertUserRole(userRole);
+	}
+	
+	/**
+	 * 
+	 * @param userNo
+	 * @param roleName
+	 */
+	public void addUserRole(int userNo, String roleName) {
+		UserRole userRole = new UserRole(userNo, roleName);
 		userMapper.insertUserRole(userRole);
 	}
 }

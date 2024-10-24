@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.example.demo.dto.ListDto;
 import com.example.demo.mapper.CategoryMapper;
@@ -13,6 +14,7 @@ import com.example.demo.util.Pagination;
 import com.example.demo.vo.Product;
 
 @Service
+@Transactional
 public class ProductService {
 	@Autowired
 	private CategoryMapper categoryMapper;

@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import com.example.demo.Service.UserService;
 import com.example.demo.dto.UserRegisterForm;
+import com.example.demo.exception.StoreException;
 
 import jakarta.validation.Valid;
 
@@ -47,7 +48,7 @@ public class HomeController {
 		
 		try {
 			userService.addNewUser(form);
-		} catch (RuntimeException e) {
+		} catch (StoreException e) {
 			errors.rejectValue("email", null, "이미 사용중인 이메일입니다.");
 			return "register-form";
 		}
