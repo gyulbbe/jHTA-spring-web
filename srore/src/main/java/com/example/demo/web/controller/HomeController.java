@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import com.example.demo.Service.UserService;
 import com.example.demo.dto.UserRegisterForm;
+import com.example.demo.exception.AlreadyUsedEmailException;
 import com.example.demo.exception.StoreException;
 
 import jakarta.validation.Valid;
@@ -20,9 +21,14 @@ public class HomeController {
 	@Autowired
 	private UserService userService;
 	
-	@GetMapping("/")
+	@GetMapping("/home")
 	public String home() {
 		return "home";
+	}
+	
+	@GetMapping("/login")
+	public String loginform() {
+		return "login-form";
 	}
 	
 	@GetMapping("/register")
@@ -48,11 +54,18 @@ public class HomeController {
 		
 		try {
 			userService.addNewUser(form);
-		} catch (StoreException e) {
+		} catch (AlreadyUsedEmailException e) {
 			errors.rejectValue("email", null, "이미 사용중인 이메일입니다.");
 			return "register-form";
-		}
+		} 
+//		catch (AlreadyUsedNickNmaeException e) {
+//			errors.rejectValue("nickname", null, "이미 사용중인 닉네임입니다.");
+//			return "register-form";
+//		} catch (AlreadyUsedTelException e) {
+//			errors.rejectValue("email", null, "이미 사용중인 전화번호입니다.");
+//			return "register-form";
+//		}
 		
-		return "redirect:/";
+		return "redirect:/home";
 	}
 }
