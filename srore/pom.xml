@@ -113,6 +113,20 @@
 			<version>3.0.3</version>
 			<scope>test</scope>
 		</dependency>
+				<!--
+			Spring security 의존성 추가
+		-->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
+		</dependency>
+		<!--
+			Spring security를 지원하는 JSP 태그라이브러리 의존성 추가
+		-->
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-taglibs</artifactId>
+		</dependency>
 	</dependencies>
 
 	<build>
