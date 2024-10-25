@@ -1,14 +1,15 @@
 <%@ page pageEncoding="UTF-8"%>
+<%@ include file="tags.jsp" %>
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
 	<div class="container">
-		<a class="navbar-brand" href="/">샘플 쇼핑몰</a>
+		<a class="navbar-brand" href="/home">샘플 쇼핑몰</a>
 		<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
 			<span class="navbar-toggler-icon"></span>
 		</button>
 		<div class="collapse navbar-collapse" id="navbarNav">
 			<ul class="navbar-nav me-auto mb-2 mb-lg-0">
 				<li class="nav-item">
-					<a class="nav-link ${menu eq 'home' ? 'active fw-bold' : '' }"  href="/">홈</a>
+					<a class="nav-link ${menu eq 'home' ? 'active fw-bold' : '' }"  href="/home">홈</a>
 				</li>
 				<li class="nav-item">
 					<a class="nav-link ${menu eq 'product' ? 'active fw-bold' : '' }" href="/product/list">전체 상품</a>
@@ -27,6 +28,8 @@
 						</ul>
 					</li>
 			</ul>
+			<!-- 인증된 사용자가 아닌 경우 -->
+			<sec:authorize access="!isAuthenticated()">
 				<ul class="navbar-nav">
 						<li class="nav-item">
 							<a class="nav-link ${menu eq 'login' ? 'active fw-bold' : '' }" href="/login">로그인</a>
@@ -35,14 +38,16 @@
 						  	<a class="nav-link ${menu eq 'register' ? 'active fw-bold' : '' }" href="/register">회원가입</a>
 						</li>
 					</ul>
-				
+			</sec:authorize>
+			<!-- 인증된 사용자인 경우 -->
+			<sec:authorize access="isAuthenticated()">
 					<span class="navbar-text"><strong>홍길동</strong><small>님 환영합니다.</small></span>
 					<ul class="navbar-nav">
 						<li class="nav-item">
 							<a class="nav-link" href="/logout">로그아웃</a>
-							
 						</li>
 					</ul>
+			</sec:authorize>
 			</div>
 	</div>
 </nav>

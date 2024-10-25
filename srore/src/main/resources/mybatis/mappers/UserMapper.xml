@@ -33,6 +33,24 @@
 	 		user_no = #{no}
 	 </select>
 	 
+	 <!-- 
+	 	List<Role> getRolesByUserNo(@Param("userNo") int userNo);
+	  -->
+	  <select id="getRolesByUserNo" resultType="Role">
+	  	select
+	  		role_name as name
+	  		, role_description as description
+	  	from
+	  		spring_roles
+	  	where
+	  		role_name in (select
+	  							role_name
+	  						from
+	  							spring_user_roles
+	  						where
+	  							user_no = #{userNo})
+	  </select>
+	 
 	 <!-- void insertUser(@Param("user") User user); -->
 	 <insert id="insertUser">
 	 	<selectKey keyProperty="user.no" resultType="int" order="BEFORE">

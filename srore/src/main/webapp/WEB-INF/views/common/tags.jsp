@@ -7,3 +7,5 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <!-- spring 폼 태그 라이브러리 -->
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<!-- spring security 태그 라이브러리 -->
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>

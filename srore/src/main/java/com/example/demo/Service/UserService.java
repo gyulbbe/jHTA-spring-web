@@ -2,6 +2,7 @@ package com.example.demo.Service;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,6 +16,9 @@ import com.example.demo.vo.UserRole;
 @Transactional
 public class UserService {
 
+	@Autowired
+	private PasswordEncoder passwordEncoder;
+	
 	@Autowired
 	private UserMapper userMapper;
 	
@@ -31,10 +35,17 @@ public class UserService {
 		
 		User user = new User();
 		BeanUtils.copyProperties(form, user);
-		// User -> {no=0, email=hong@gmail.com, password=zxcv1234, ...}
+
+		// 비밀번호를 암호화한다.
+		String encodedPassword = passwordEncoder.encode(user.getPassword());
+		user.setPassword(encodedPassword);
+		
 		
 		// 회원정보를 테이블에 저장시킨다.
 		userMapper.insertUser(user);
+		// User -> {no=0, email=hong@gmail.com, password=zxcv1234, ...}
+		
+		addUserRole(user.getNo(), "ROLE_USER");
 		// User -> {no=23, email=hong@gmail.com, password=zxcv1234, ...}
 		
 		// 신규 회원의 권한정보를 테이블에 저장시킨다.

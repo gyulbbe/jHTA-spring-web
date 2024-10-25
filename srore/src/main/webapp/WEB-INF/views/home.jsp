@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8" trimDirectiveWhitespaces="true"%>
-<%@ include file="common/tags.jsp" %>
 <!doctype html>
+<%@ include file="common/tags.jsp" %>
 <html lang="ko">
 <head>
 <meta charset="utf-8">
