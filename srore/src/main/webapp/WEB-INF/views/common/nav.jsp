@@ -14,6 +14,9 @@
 				<li class="nav-item">
 					<a class="nav-link ${menu eq 'product' ? 'active fw-bold' : '' }" href="/product/list">전체 상품</a>
 				</li>
+				<li class="nav-item">
+					<a class="nav-link ${menu eq 'board' ? 'active fw-bold' : '' }" href="/board/list">게시판</a>
+				</li>
 				
 					<li class="nav-item dropdown ${menu eq 'my' ? 'active fw-bold' : '' }">
 						<a class="nav-link dropdown-toggle" href="#" id="my-menu-link" role="button" data-bs-toggle="dropdown" aria-expanded="false">

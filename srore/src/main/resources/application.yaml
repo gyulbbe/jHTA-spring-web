@@ -28,3 +28,7 @@ mybatis:
   configuration:  # 기타 설정정보를 정의한다.
     jdbc-type-for-null: NULL
     log-impl: org.apache.ibatis.logging.log4j2.Log4j2Impl
+### 첨부파일 업로드 폴더
+upload:
+  directory:
+    board: "c:/files/board"
