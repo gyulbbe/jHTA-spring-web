@@ -22,4 +22,11 @@ public class Board {
 	private Date createdDate;
 	private Date updatedDate;
 	private User user;
+	
+	public String getOriginalFilename() {
+		if (filename == null) {
+			return null;
+		}
+		return filename.substring(13);
+	}
 }
