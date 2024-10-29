@@ -1,11 +1,16 @@
 package com.example.demo.web.controller;
 
+import java.io.File;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -109,10 +114,47 @@ public class BoardController {
 		return "board/detail";
 	}
 	
+	/*
+	 * org.springframework.core.io.Resource
+	 * + 스프링에서 저수준 자원(Low Level Resource)에 대한 처리를 추상화한 인터페이스다.
+	 * + Resource 인터페이스를 이용해서 자원의 종류에 상관없이 동일한 방식으로 저수준 자원을 접근할 수 있도록 지원한다.
+	 * + 다양한 구현클래스
+	 * 		urlResource
+	 * 		ClassPathResource
+	 * 		SystemResource
+	 * 		InputStreamResource
+	 * 		ByteArrayResource
+	 * + FileSystemResource는 파일시스템의 특정위치에 저장된 파일자원을 읽어 올 수 있다.
+	 */
 	@GetMapping("/download")
-	public ResponseEntity<Resource> downloadfile(){
-		
-		return null;
-	}
-	
+	   public ResponseEntity<Resource> downloadfile(int no) throws Exception {
+		// 게시글 정보 조회
+	      Board board = boardService.getBoardDetail(no);
+	      // 파일명 조회
+	      String filename = board.getFilename();
+	      String originalFilename = board.getOriginalFilename();
+	      originalFilename = URLEncoder.encode(originalFilename, "utf-8");
+	      // 디렉토리의 파일명을 이용해서 해당 파일을 표현한 File객체 생성
+	      File file = new File(new File(saveDirectory), filename);
+	      // file객체가 표현하는 자원을 읽어오는 FileSystemResource객체를 생성
+	      FileSystemResource resource = new FileSystemResource(file);
+	      
+	      /*
+	       * ResponseEntity.ok(): HTTP 응답코드 200으로 설정
+	       * .header(응답헤더명, 응답헤더값) : 응답메시지의 헤더부에 정보를 설정
+	       * .body(데이터) : 응답메시지의 바디부에 데이터를 설정
+	       * 
+	       * HttpHeader.CONTENT_DISPOSITION
+	       *  + 응답메시지로 보내는 컨텐츠가 브라우저 내부에서 보여질 것인지,
+	       *    다운로드되어 저장될 것인지를 알려주는 헤더정보다.
+	       *  + 사용예
+	       *  		응답헤더명				응답헤더값
+	       *        ---------------------------------
+	       *  		Content-Disposition: inline		브라우저 내부에 표현
+	       *  		Content-Disposition: attachment	컴퓨터에 저장
+	       */
+	      return ResponseEntity.ok()
+	            .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + originalFilename)
+	            .body(resource);
+	   }
 }

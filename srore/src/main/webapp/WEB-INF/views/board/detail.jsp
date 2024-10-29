@@ -59,7 +59,13 @@
 						<tr>
 							<th>내용</th>
 							<td colspan="3">
-								<textarea rows="7" class="form-control bg-white border-0" readonly="readonly">${board.content }</textarea>
+								<%--
+									<c:out /> 태그
+										+ XSS 공격을 방어한다.
+										+ 사용자가 작성한 게시글 내용에 태그가 포함되어 있는 경우 글자를 이스케이프문자로 변환한다.
+										<script> ----> &ltscript&gt;
+								 --%>
+								<c:out value="${board.content }"/>
 							</td>
 						</tr>
 					</tbody>
