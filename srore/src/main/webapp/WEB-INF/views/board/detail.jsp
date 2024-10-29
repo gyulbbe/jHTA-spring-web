@@ -58,7 +58,9 @@
 						</c:if>
 						<tr>
 							<th>내용</th>
-							<td colspan="3"><c:out value="${board.content }"/> </td>
+							<td colspan="3">
+								<textarea rows="7" class="form-control bg-white border-0" readonly="readonly">${board.content }</textarea>
+							</td>
 						</tr>
 					</tbody>
 				</table>
