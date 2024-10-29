@@ -30,16 +30,16 @@ public class ProductController {
 						, @RequestParam(name = "opt", required = false) String opt
 						, @RequestParam(name = "value", required = false) String value
 						, Model model) {
-		Map<String, Object> condotion = new HashMap<>();
-		condotion.put("page", page);
-		condotion.put("rows", rows);
-		condotion.put("sort", sort);
+		Map<String, Object> condition = new HashMap<>();
+		condition.put("page", page);
+		condition.put("rows", rows);
+		condition.put("sort", sort);
 		if (StringUtils.hasText(value)) {
-			condotion.put("opt", opt);
-			condotion.put("value", value);
+			condition.put("opt", opt);
+			condition.put("value", value);
 		}
 		
-		ListDto<Product> dto = productService.getAllProducts(condotion);
+		ListDto<Product> dto = productService.getAllProducts(condition);
 		model.addAttribute("products", dto.getData());
 		model.addAttribute("paging", dto.getPaging());
 		return "product/list";

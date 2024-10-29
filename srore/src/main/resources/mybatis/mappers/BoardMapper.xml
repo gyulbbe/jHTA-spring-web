@@ -1,6 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.demo.mapper.BoardMapper">
+
+	<resultMap type="Board" id="BoardResultMap">
+		<id property="no" column="BOARD_NO" />
+		<result property="title" column="BOARD_TITLE"/>
+		<result property="content" column="BOARD_CONTENT"
+			jdbcType="CLOB" javaType="java.lang.String"/>
+		<result property="filename" column="BOARD_FILENAME"/>
+		<result property="createdDate" column="BOARD_CREATED_DATE"/>
+		<result property="updatedDate" column="BOARD_UPDATED_DATE"/>
+		<association property="user" javaType="USER">
+			<id property="no" column="USER_NO"/>
+			<result property="nickname" column="USER_NICKNAME"/>
+		</association>
+	</resultMap>
+   		
 	<!-- 
 		void insertBoard(@Param("board") Board board);
 	 -->
@@ -26,4 +41,85 @@
 	 	</if>
 	 	)
 	 </insert>
+	 
+	 <!-- 
+	 	int getTotalRows(@Param("condition") Map<String, Object> condition);
+	  -->
+	  <select id="getTotalRows">
+	  	select
+	  		count(*)
+	  	from
+	  		spring_boards B
+	  	<where>
+	  		<include refid="BoardsFilterCondition" />
+	  	</where>
+	  </select>
+	  
+	  <!-- 
+	  	List<Board> getBoards(@Param("condition") Map<String, Object> condition);
+	   -->
+	   <select id="getBoards" resultType="Board">
+	   	select
+	   		*
+	   	from (
+	   		select
+	   			row_number() over (order by B.board_no desc) rn
+	   			, B.board_no  as "no"
+	   			, B.board_title  as "title"
+	   			, U.user_nickname  as "user.nickname"
+	   			, B.board_created_date  as "createdDate"
+	   			, B.board_updated_date  as "updatedDate"
+	   		from
+	   			spring_boards B, spring_users U
+	   		where
+	   			B.user_no = U.user_no
+	   			<include refid="BoardsFilterCondition" />
+	   	)
+	   	where rn between #{condition.begin} and #{condition.end}
+	   </select>
+	   
+	  	<!-- 
+   			Board getBoardByNo(@Param("no") int no);
+   		-->
+   		
+   		<select id="getBoardByNo" resultMap="BoardResultMap">
+   			select
+   				B.board_no 
+   				, B.board_title
+   				, B.board_content
+   				, B.board_filename
+   				, B.board_created_date
+   				, B.board_updated_date
+   				, U.user_no
+   				, U.user_nickname
+   			from
+   				spring_boards B, spring_users U
+   			where
+   				B.user_no = U.user_no
+   				and B.board_no = #{no}
+   		</select>
+	   
+	   <!-- 
+	   		게시글 검색시 자주 사용되는 SQL 구문
+	    -->
+   		<sql id="BoardsFilterCondition">
+	   		<if test="condition.opt != null">
+	  			<choose>
+	  				<when test="condition.opt == 'title'">
+	  					and B.board_title like '%' || #{condition.keyword} || '%'
+	  				</when>
+	  				<when test="condition.opt == 'writer'">
+	  					and B.user_no in (select
+	  									user_no
+	  								from
+	  									spring_users
+	  								where
+	  									user_nickname = #{condition.keyword})
+	  				</when>
+	  				<when test="condition.opt == 'content'">
+	  					and B.board_content like '%' || #{condition.keyword} || '%'
+	  				</when>
+	  			</choose>
+	  		</if>
+   		</sql>
 </mapper>
