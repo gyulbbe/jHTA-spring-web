@@ -46,16 +46,27 @@
 								</tr>
 							</thead>
 							<tbody>
-								<tr>
-									<td>1</td>
-									<td><a href="">연습</a></td>
-									<td>홍길동</td>
-									<td>2024-01-01</td>
-									<td>2024-01-01</td>
-								</tr>
+							<c:choose>
+								<c:when test="${empty boards }">
+									<tr>
+										<td colspan="5" class="text-center">
+										조회된 게시글이 없습니다.
+									</tr>
+								</c:when>
+								<c:otherwise>
+									<c:forEach var="board" items="${boards }">
+										<tr>
+											<td>${board.no }</td>
+											<td><a href="detail?no=${board.no }">${board.title }</a></td>
+											<td>${board.user.nickname }</td>
+											<td><fmt:formatDate value="${board.createdDate }"/></td>
+											<td><fmt:formatDate value="${board.updatedDate }"/></td>
+										</tr>
+									</c:forEach>
+								</c:otherwise>
+							</c:choose>
 							</tbody>
 						</table>
-
 					</div>
 				</div>
 				<div class="col-12 mt-3">
@@ -69,24 +80,20 @@
 			<div class="col-12">
 				<nav>
 					<ul class="pagination justify-content-center">
-					    <li class="page-item ">
+					    <li class="page-item ${paging.first ? 'disabled' : '' }">
 					    	<a class="page-link" 
-					    		onclick="changePage(1, event)" 
-					    		href="list?page=1">이전</a>
+					    		onclick="changePage(${paging.prevPage}, event)">이전</a>
 					    </li>
-					    
-					<c:forEach var="num" begin="1" end="5">
+					<c:forEach var="num" begin="${paging.beginPage }" end="${paging.endPage }">
 					    <li class="page-item ${paging.page eq num ? 'active' : '' }">
 					    	<a class="page-link" 
-					    		onclick="changePage(${num }, event)" 
-					    		href="list?page=${num }">${num }</a>
+					    		onclick="changePage(${num }, event)">${num }</a>
 					    </li>
 					</c:forEach>
 					    
-					    <li class="page-item ">
+					    <li class="page-item ${paging.last ? 'disabled' : '' }">
 					    	<a class="page-link" 
-					    		onclick="changePage(2, event)" 
-					    		href="list?page=2">다음</a>
+					    		onclick="changePage(${paging.nextPage}, event)">다음</a>
 					    </li>
 				  	</ul>
 				</nav>
@@ -96,19 +103,19 @@
 			<div class="col-12">
 				<form id="form-search" method="get" action="list">
 					<input type="hidden" name="page" />
-		  			<div class="row g-3">
+		  			<div class="row g-3 d-flex justify-content-center">
 		  				<div class="col-2">
 		  					<select class="form-control" name="opt">
-		  						<option value="title"> 제목</option>
-		  						<option value="writer" > 작성자</option>
-		  						<option value="content" > 내용</option>
+		  						<option value="title" ${param.opt eq 'title' ? 'selected' : ''}> 제목</option>
+		  						<option value="writer" ${param.opt eq 'writer' ? 'selected' : ''}> 작성자</option>
+		  						<option value="content" ${param.opt eq 'content' ? 'selected' : ''}> 내용</option>
 		  					</select>
 		  				</div>
 		  				<div class="col-3">
-		  					<input type="text" class="form-control" name="keyword" >
+		  					<input type="text" class="form-control" name="keyword" value="${param.keyword }">
 		  				</div>
 		  				<div class="col-1">
-		  					<button type="button" class="btn btn-outline-primary">검색</button>
+		  					<button type="button" class="btn btn-outline-primary" onclick="searchKeyword()">검색</button>
 		  				</div>
 		  			</div>
 				</form>
@@ -119,7 +126,24 @@
 
 <!-- 푸터부 -->
 <footer>
-
 </footer>
+<script>
+	function changePage(page, event) {
+		event.preventDefault();
+		let form = document.querySelector("#form-search");
+		let input = document.querySelector("input[name=page]");
+		
+		input.value = page;
+		form.submit();
+	}
+	
+	function searchKeyword() {
+		let form = document.querySelector("#form-search");
+		let input = document.querySelector("input[name=page]");
+		
+		input.value = 1;
+		form.submit();
+	}
+</script>
 </body>
 </html>

@@ -58,9 +58,9 @@
 		  						<option value="maxPrice" ${param.opt eq 'maxPrice' ? 'selected' : '' }>최대가격</option>
 		  					</select>
 		  				</div>
-		  				<div class="col-3">
-		  					<input type="text" class="form-control" name="value">
-		  				</div>
+			  				<div class="col-3">
+								<input type="text" class="form-control" name="value" value="${param.value}">
+			  				</div>
 		  				<div class="col-1">
 		  					<button type="button" class="btn btn-outline-primary" onclick="searchValue()">검색</button>
 		  				</div>
@@ -104,7 +104,7 @@
 							<tr>
 								<td>${loop.count }</td>
 								<td>${p.category.name }</td>
-								<td><a class="text-decoration-none" href="detail?no=10">${p.name }</a></td>
+								<td><a class="text-decoration-none" href="detail?no=${p.no }">${p.name }</a></td>
 								<td class="text-end"><fmt:formatNumber value="${p.price }"/> 원</td>
 								<td class="text-end"><span class="text-danger"><fmt:formatNumber value="${p.discountPrice }"/></span> 원</td>
 							</tr>
@@ -121,15 +121,15 @@
 				<nav>
 					<ul class="pagination justify-content-center">
 					    <li class="page-item ${paging.first ? 'disabled' : '' } ">
-					    	<a class="page-link" onclick="changePage(${paging.prevPage }, event)" href="list?page=${paging.prevPage }">이전</a>
+					    	<a class="page-link" onclick="changePage(${paging.prevPage }, event)">이전</a>
 					    </li>
 					    <c:forEach var="num" begin="${paging.beginPage }" end="${paging.endPage }">
 					    <li class="page-item ${paging.page eq num ? 'active' : '' }">
-					    	<a class="page-link" onclick="changePage(${num }, event)" href="list?page=${num }">${num }</a>
+					    	<a class="page-link" onclick="changePage(${num }, event)">${num }</a>
 					    </li>
 						</c:forEach>
 					    <li class="page-item ${paging.last ? 'disabled' : '' }">
-					    	<a class="page-link" onclick="changePage(${paging.nextPage }, event)" href="list?page=${paging.nextPage }">다음</a>
+					    	<a class="page-link" onclick="changePage(${paging.nextPage }, event)">다음</a>
 					    </li>
 				  	</ul>
 				</nav>
