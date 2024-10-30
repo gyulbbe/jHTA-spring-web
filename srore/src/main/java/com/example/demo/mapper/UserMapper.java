@@ -12,7 +12,7 @@ import com.example.demo.vo.UserRole;
 @Mapper
 public interface UserMapper {
 	
-	User getUserByEmail(@Param("email") String eamil);
+	User getUserByEmail(@Param("email") String email);
 	User getUserByNo(@Param("no") int no);
 	List<Role> getRolesByUserNo(@Param("userNo") int userNo);
 	

@@ -36,8 +36,11 @@
 									   novalidate="novalidate">
 								<div class="mb-3">
 									<label class="form-label">이메일</label>
-									<form:input class="form-control" id="user-email" path="email" />
-									<form:errors path="email" cssClass="text-danger fst-italic"/>
+									<div class="d-flex justify-content-between">
+										<form:input class="form-control" id="user-email" path="email" onchange="rollbackEmailCheck()" />
+										<button type="button" class="btn btn-outline-primary btn-sm" onclick="checkEmail()">중복체크</button>
+									</div>
+								<form:errors path="email" cssClass="text-danger fst-italic"/>
 								</div>
 								<div class="mb-3">
 									<label class="form-label">비밀번호</label>
@@ -71,7 +74,7 @@
 		                        </div> --%>
 								<div class="mb-3 text-end">
 									<a class="btn btn-secondary" href="/">취소</a>
-									<form:button type="submit" class="btn btn-primary">회원가입</form:button>
+									<form:button type="button" class="btn btn-primary" onclick="formSubmit()">회원가입</form:button>
 								</div>
 							</form:form>
 						</div>
@@ -113,5 +116,63 @@
 <footer>
 
 </footer>
+<script>
+	let isEmailChecked = false;
+	let isEmailPassed = false;
+	
+	// 중복체크 후에 이메일을 다시 변경했을 때 체크여부, 통과여부를 전부 되돌린다.
+	function rollbackEmailCheck() {
+		alert('롤백');
+		isEmailChecked = false;
+		isEmailPassed = false;
+	}
+	
+	function formSubmit() {
+		if (!isEmailChecked) {
+			alert('이메일 중복체크를 수행하지 않았습니다.');
+			return;
+		}
+		if (!isEmailPassed) {
+			alert('이미 사용중인 이메일은 사용할 수 없습니다.');
+			return;
+		}
+		
+		// 비밀번호, 비밀번호확인, 닉네임, 전화번호 입력여부 체크하자.
+		document.querySelector("#form-register").submit();
+	}
+	
+	/*
+		fetch메소드를 비동기 방식으로 실행시킨다.
+		away 키워드는 요청처리가 완료될 때까지 기다린다.
+		await 키워드를 사용할 경우 해당함수에는 async 키워드를 붙여서 함수내부에서 비동기 통신을 수행하고 있음을 나타낸다.
+		let response = await fetch(요청URL);
+		let data = await response.text();
+	 */
+	async function checkEmail(){
+		// 입력필드 획득
+		let input = document.querySelector('#user-email');
+		// 입력필드에 입력한 이메일 획득
+		let email = input.value;
+		if (email === "") {
+			alert("이메일을 입력하세요.");
+			input.focus();
+			return;
+		}
+		
+		isEmailChecked = true;
+		let response = await fetch("/check-email?email=" + email);
+		if (response.ok) {
+			let data = await response.text();
+			if (data == 'none') {
+				isEmailPassed = true;
+				alert('사용가능한 이메일입니다.');
+			} else if (data == 'exists') {
+				isEmailPassed = false;
+				alert('이미 사용중인 이메일입니다.');
+			}
+		}
+		// 체크결과 화면에 표시
+	}
+</script>
 </body>
 </html>

@@ -23,6 +23,16 @@ public class UserService {
 	private UserMapper userMapper;
 	
 	/**
+	 * 이메일을 전달받아서 존재여부를 체크하는 서비스다.
+	 * @param email 이메일
+	 * @return 이메일이 존재하면 true를 반환한다.
+	 */
+	public boolean isExistEmail(String email) {
+		User user = userMapper.getUserByEmail(email);
+		return user != null;
+	}
+	
+	/**
 	 * 신규 사용자 정보를 전달받아서 회원가입시키는 서비스다.
 	 * @param form
 	 */
