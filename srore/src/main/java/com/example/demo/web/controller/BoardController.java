@@ -1,7 +1,6 @@
 package com.example.demo.web.controller;
 
 import java.io.File;
-import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
@@ -22,6 +21,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.example.demo.Service.BoardService;
 import com.example.demo.dto.BoardRegisterForm;
@@ -30,6 +30,7 @@ import com.example.demo.security.LoginUser;
 import com.example.demo.util.FileUtils;
 import com.example.demo.vo.Board;
 import com.example.demo.vo.User;
+import com.example.demo.web.view.FileDownloadView;
 
 @Controller
 @RequestMapping("/board")
@@ -40,6 +41,9 @@ public class BoardController {
 	
 	@Autowired
 	private BoardService boardService;
+	
+	@Autowired
+	private FileDownloadView fileDownloadView;
 	
 	@GetMapping("/list")
 	public String list(
@@ -112,6 +116,21 @@ public class BoardController {
 		model.addAttribute("board", board);
 		
 		return "board/detail";
+	}
+	
+	@GetMapping("/filedown")
+	public ModelAndView download(int no) {
+		Board board = boardService.getBoardDetail(no);
+		
+		ModelAndView mav = new ModelAndView();
+		// 응답을 제공할 View를 직접 설정한다.
+		mav.setView(fileDownloadView);
+		// 응답에 필요한 정보를 저장한다. Model로 저장된다.
+		mav.addObject("directory", saveDirectory);
+		mav.addObject("filename", board.getFilename());
+		mav.addObject("originalFilename", board.getOriginalFilename());
+		
+		return mav;
 	}
 	
 	/*

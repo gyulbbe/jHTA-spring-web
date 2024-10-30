@@ -53,7 +53,7 @@
 						<c:if test="${not empty board.originalFilename }">
 						<tr>
 							<th>첨부파일</th>
-							<td colspan="3">${board.originalFilename } <a href="download?no=${board.no}" class="btn btn-outline-primary btn-sm">다운로드</a></td>
+							<td colspan="3">${board.originalFilename } <a href="filedown?no=${board.no}" class="btn btn-outline-primary btn-sm">다운로드</a></td>
 						</tr>
 						</c:if>
 						<tr>
