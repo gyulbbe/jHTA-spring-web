@@ -78,6 +78,7 @@
 							<col width="*">
 							<col width="15%">
 							<col width="15%">
+							<col width="15%">
 						</colgroup>
 						<thead>
 							<tr>
@@ -86,6 +87,7 @@
 								<th>상품명</th>
 								<th class="text-end">가격</th>
 								<th class="text-end">할인가격</th>
+								<th></th>
 							</tr>
 						</thead>
 						<tbody>
@@ -107,6 +109,8 @@
 								<td><a class="text-decoration-none" href="detail?no=${p.no }">${p.name }</a></td>
 								<td class="text-end"><fmt:formatNumber value="${p.price }"/> 원</td>
 								<td class="text-end"><span class="text-danger"><fmt:formatNumber value="${p.discountPrice }"/></span> 원</td>
+								<td><button class="btnbtn-sm btn-outline-primary"
+									onclick="previewProduct(${p.no})">미리보기</button> </td>
 							</tr>
 						</c:forEach>
 						</tbody>
@@ -139,13 +143,73 @@
 		<!-- 페이지 내비게이션 끝 -->
 	</div>
 </main>
-
+<div class="modal fade" id="modal-preview-product" tabindex="-1" aria-labelledby="modal-preview-product" aria-hidden="true">
+   <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+         <div class="modal-header">
+            <h1 class="modal-title fs-5" id="modal-preview-product">상품정보 미리보기</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+         </div>
+         <div class="modal-body">
+            <table class="table">
+               <colgroup>
+                  <col width="15%">
+                  <col width="35%">
+                  <col width="15%">
+                  <col width="35%">
+               </colgroup>
+               <tr>
+                  <th>번호</th>
+                  <td><span id="p-no"></span></td>
+                  <th>제조사</th>
+                  <td><span id="p-maker"></span></td>
+               </tr>
+               <tr>
+                  <th>상품명</th>
+                  <td colspan="3"><span id="p-name"></span></td>
+               </tr>
+               <tr>
+                  <th>가격</th>
+                  <td><span id="p-price"></span></td>
+                  <th>할인가</th>
+                  <td><span id="p-discount-price"></span></td>
+               </tr>
+               <tr>
+                  <th>리뷰수</th>
+                  <td><span id="p-review-cnt"></span></td>
+                  <th>평점</th>
+                  <td><span id="p-stock"></span></td>
+               </tr>
+            </table>
+         </div>
+         <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+         </div>
+      </div>
+   </div>
+</div>
 <!-- 푸터부 -->
 <footer>
 </footer>
 <script>
 	const form = document.querySelector('#form-search');
 	const pageInput = document.querySelector('input[name=page]');
+    const myModal = new bootstrap.Modal('#modal-preview-product');
+	
+	async function previewProduct(productNo) {
+		let response = await fetch("/product/preview?no=" + productNo);
+		let data = await response.json();
+		
+		document.getElementById("p-no").textContent = data.no;
+		document.getElementById("p-maker").textContent = data.maker;
+		document.getElementById("p-name").textContent = data.name;
+		document.getElementById("p-price").textContent = data.price;
+		document.getElementById("p-discount-price").textContent = data.discountPrice;
+		document.getElementById("p-review-cnt").textContent = data.reviewCnt;
+		document.getElementById("p-stock").textContent = data.stock;
+		
+	    myModal.show();
+	   }
 	
 	// 한 화면에 표시할 행의 갯수가 변경될 때
 	function changeRow() {

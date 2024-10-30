@@ -1,7 +1,6 @@
 package com.example.demo.web.controller;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +10,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.example.demo.Service.ProductService;
 import com.example.demo.dto.ListDto;
@@ -22,6 +22,16 @@ public class ProductController {
 
 	@Autowired
 	private ProductService productService;
+	
+	@GetMapping("/preview")
+	@ResponseBody
+	public Product preview(int no) {
+		Product product = productService.getProductByNo(no);
+		
+//		ProductPreviewDto dto = productService.getProductByNo(no);
+		
+		return product;
+	}
 	
 	@GetMapping("/list")
 	public String list(@RequestParam(name = "page", required = false, defaultValue = "1") int page
