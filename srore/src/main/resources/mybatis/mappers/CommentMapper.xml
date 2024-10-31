@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.mapper.CommentMapper">
+	
+	<!-- 
+		void insertComment(@Param("comment") Comment comment);
+	 -->
+	<insert id="insertComment">
+		<selectKey keyProperty="comment.no" resultType="int" order="BEFORE">
+			select comments_seq.nextval
+			from dual
+		</selectKey>
+		insert into SPRING_BOARD_COMMENTS
+		(
+		COMMENT_NO
+		, COMMENT_TITLE
+		, COMMENT_CONTENT
+		, COMMENT_CREATED_DATE
+		, BOARD_NO
+		, USER_NO
+		)
+		values
+		(
+		#{comment.no}
+		, #{comment.title}
+		, #{comment.content}
+		, #{comment.createdDate}
+		, #{comment.board.no}
+		, #{comment.user.no}
+		)
+	</insert>
+	
+	<!-- 
+		List<Comment> getCommentsByBoardNo(@Param("boardNo") int boardNo);
+	 -->
+	 <select id="getCommentsByBoardNo" resultType="Comment">
+	 	select
+	 		C.comment_no 					as no
+	 		, C.comment_title				as title
+	 		, C.comment_content				as content
+	 		, C.comment_created_date		as createdDate
+	 		, U.user_no						as "user.no"
+	 		, U.user_nickname				as "user.nickname"
+	 	from
+	 		spring_board_comments C, spring_users U
+	 	where
+	 		C.board_no = #{boardNo}
+	 	and
+	 		C.user_no = U.user_no
+	 	order by
+	 		C.comment_no asc
+	 </select>
+</mapper>
