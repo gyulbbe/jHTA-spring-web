@@ -143,7 +143,7 @@
 	
 	/*
 		fetch메소드를 비동기 방식으로 실행시킨다.
-		away 키워드는 요청처리가 완료될 때까지 기다린다.
+		await 키워드는 요청처리가 완료될 때까지 기다린다.
 		await 키워드를 사용할 경우 해당함수에는 async 키워드를 붙여서 함수내부에서 비동기 통신을 수행하고 있음을 나타낸다.
 		let response = await fetch(요청URL);
 		let data = await response.text();
