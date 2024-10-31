@@ -3,6 +3,7 @@ package com.example.demo.web.controller;
 import java.io.File;
 import java.net.URLEncoder;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,18 +18,23 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.example.demo.Service.BoardService;
 import com.example.demo.dto.BoardRegisterForm;
+import com.example.demo.dto.CommentRegisterForm;
 import com.example.demo.dto.ListDto;
 import com.example.demo.security.LoginUser;
 import com.example.demo.util.FileUtils;
 import com.example.demo.vo.Board;
+import com.example.demo.vo.Comment;
 import com.example.demo.vo.User;
 import com.example.demo.web.view.FileDownloadView;
 
@@ -44,6 +50,23 @@ public class BoardController {
 	
 	@Autowired
 	private FileDownloadView fileDownloadView;
+	
+	@GetMapping("/comments/{no}")
+	@ResponseBody
+	public List<Comment> comments(@PathVariable("no") int boardNo) {
+		return boardService.getComments(boardNo);
+	}
+	
+	@PreAuthorize("isAuthenticated()")
+	@PostMapping("/addComment")
+	@ResponseBody
+	public Comment addComment(@RequestBody CommentRegisterForm form,
+			@AuthenticationPrincipal LoginUser loginUser) {
+
+		Comment comment = boardService.addNewComment(form, loginUser.getNo());
+		
+		return comment;
+	}
 	
 	@GetMapping("/list")
 	public String list(

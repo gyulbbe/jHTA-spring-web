@@ -1,5 +1,6 @@
 package com.example.demo.Service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -7,11 +8,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.example.demo.dto.CommentRegisterForm;
 import com.example.demo.dto.ListDto;
 import com.example.demo.exception.StoreException;
 import com.example.demo.mapper.BoardMapper;
+import com.example.demo.mapper.CommentMapper;
+import com.example.demo.mapper.UserMapper;
 import com.example.demo.util.Pagination;
 import com.example.demo.vo.Board;
+import com.example.demo.vo.Comment;
+import com.example.demo.vo.User;
 
 @Service
 @Transactional
@@ -20,6 +26,12 @@ public class BoardService {
 	@Autowired
 	private BoardMapper boardMapper;
 
+	@Autowired
+	private UserMapper userMapper;
+	
+	@Autowired
+	private CommentMapper commentMapper;
+	
 	public void addNewBoard(Board board) {
 		boardMapper.insertBoard(board);
 	}
@@ -52,5 +64,27 @@ public class BoardService {
 			throw new StoreException("["+boardNo+"] 빈 게시글이 없습니다.");
 		}
 		return board;
+	}
+
+	public Comment addNewComment(CommentRegisterForm form, int loginUserNo) {
+		Comment comment = new Comment();
+		comment.setTitle(form.getTitle());
+		comment.setContent(form.getContent());
+		comment.setCreatedDate(new Date());
+		
+		Board board = new Board();
+		board.setNo(form.getBoardNo());
+		comment.setBoard(board);
+		
+		User user = userMapper.getUserByNo(loginUserNo);
+		comment.setUser(user);
+		
+		commentMapper.insertComment(comment);
+		
+		return comment;
+	}
+	
+	public List<Comment> getComments(int boardNo) {
+		return commentMapper.getCommentsByBoardNo(boardNo);
 	}
 }
