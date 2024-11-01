@@ -60,7 +60,7 @@ public class RestResponseDto<T> {
 	public static <T> RestResponseDto<T> fail(int status, String message) {
 		RestResponseDto<T> dto = new RestResponseDto<>();
 		dto.setStatus(status);
-		dto.setMessage("성공");
+		dto.setMessage(message);
 		dto.setData(null);
 		
 		return dto;
