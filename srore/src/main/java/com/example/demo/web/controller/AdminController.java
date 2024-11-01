@@ -15,6 +15,11 @@ public class AdminController {
 	@Autowired
 	private UserService userService;
 	
+	@GetMapping("/home")
+	public String home() {
+		return "admin/home";
+	}
+	
 	@GetMapping("/user/addrole")
 	public String addRole(
 			@RequestParam int userNo,

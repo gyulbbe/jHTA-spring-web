@@ -19,6 +19,9 @@ public class SecurityConfig {
 	@Autowired
 	private CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
 	
+	@Autowired
+	private CustomAccessDeniedHandler customAccessDeniedHandler;
+	
 	@Bean
 	SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 		
@@ -54,8 +57,11 @@ public class SecurityConfig {
         			.logoutSuccessUrl("/home")
         			// 세션객체를 무효화시킨다.
         			.invalidateHttpSession(true))
-        	.exceptionHandling(exceptionHandling -> exceptionHandling.authenticationEntryPoint(customAuthenticationEntryPoint));
-        	;
+        	.exceptionHandling(exceptionHandling -> exceptionHandling
+        			// 인증되지 않은 사용자가 인증이 필요한 리소스를 요청했을 때
+        			.authenticationEntryPoint(customAuthenticationEntryPoint)
+        			// 접근권한을 가지고 있지 않은 리소스를 요청했을 때
+        			.accessDeniedHandler(customAccessDeniedHandler));
      return http.build();
 	}
 	

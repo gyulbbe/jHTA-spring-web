@@ -17,7 +17,11 @@
 				<li class="nav-item">
 					<a class="nav-link ${menu eq 'board' ? 'active fw-bold' : '' }" href="/board/list">게시판</a>
 				</li>
-				
+				<sec:authorize access="hasRole('ROLE_ADMIN')">
+				<li class="nav-item">
+					<a class="nav-link ${menu eq 'admin' ? 'active fw-bold' : '' }" href="/admin/home">관리자</a>
+				</li>
+				</sec:authorize>
 					<li class="nav-item dropdown ${menu eq 'my' ? 'active fw-bold' : '' }">
 						<a class="nav-link dropdown-toggle" href="#" id="my-menu-link" role="button" data-bs-toggle="dropdown" aria-expanded="false">
 							마이 메뉴
@@ -44,7 +48,13 @@
 			</sec:authorize>
 			<!-- 인증된 사용자인 경우 -->
 			<sec:authorize access="isAuthenticated()">
-					<span class="navbar-text"><strong>홍길동</strong><small>님 환영합니다.</small></span>
+					<span class="navbar-text">
+					<strong>
+						<sec:authentication property="principal.nickname" var="LOGIN_NICKNAME" />
+						<sec:authentication property="principal.no" var="LOGIN_USERNO" />
+						${LOGIN_NICKNAME }
+					</strong>
+					<small>님 환영합니다.</small></span>
 					<ul class="navbar-nav">
 						<li class="nav-item">
 							<a class="nav-link" href="/logout">로그아웃</a>
