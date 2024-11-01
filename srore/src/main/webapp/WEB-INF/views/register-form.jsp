@@ -122,7 +122,6 @@
 	
 	// 중복체크 후에 이메일을 다시 변경했을 때 체크여부, 통과여부를 전부 되돌린다.
 	function rollbackEmailCheck() {
-		alert('롤백');
 		isEmailChecked = false;
 		isEmailPassed = false;
 	}
@@ -160,13 +159,20 @@
 		}
 		
 		isEmailChecked = true;
-		let response = await fetch("/check-email?email=" + email);
+		let response = await fetch("/ajax/check-email?email=" + email);
 		if (response.ok) {
-			let data = await response.text();
-			if (data == 'none') {
+			let result = await response.json();
+			/*
+				result -> {
+					status: 200,
+					message: "성공",
+					data: "exists"
+				}
+			*/
+			if (result.data == 'none') {
 				isEmailPassed = true;
 				alert('사용가능한 이메일입니다.');
-			} else if (data == 'exists') {
+			} else if (result.data == 'exists') {
 				isEmailPassed = false;
 				alert('이미 사용중인 이메일입니다.');
 			}

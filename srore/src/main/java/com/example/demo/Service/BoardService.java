@@ -87,4 +87,12 @@ public class BoardService {
 	public List<Comment> getComments(int boardNo) {
 		return commentMapper.getCommentsByBoardNo(boardNo);
 	}
+
+	public void deleteComment(int commentNo, int userNo) {
+		Comment comment = commentMapper.getCommentByBoardNo(commentNo);
+		if (comment.getUser().getNo() != userNo) {
+			throw new StoreException("다른 사람이 작성한 댓글은 삭제할 수 없습니다.");
+		}
+		commentMapper.deleteComment(commentNo);
+	}
 }

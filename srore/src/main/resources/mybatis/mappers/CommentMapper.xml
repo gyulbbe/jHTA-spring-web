@@ -3,6 +3,36 @@
 <mapper namespace="com.example.demo.mapper.CommentMapper">
 	
 	<!-- 
+		Comment getCommentByBoardNo(@Param("no") int commentNo);
+	 -->
+	 <select id="getCommentByBoardNo" resultType="Comment">
+	 	select
+	 		C.comment_no 					as no
+	 		, C.comment_title				as title
+	 		, C.comment_content				as content
+	 		, C.comment_created_date		as createdDate
+	 		, C.board_no					as "board.no"
+	 		, U.user_no						as "user.no"
+	 		, U.user_nickname				as "user.nickname"
+	 	from
+	 		spring_board_comments C, spring_users U
+	 	where
+	 		U.user_no = C.user_no
+	 	and
+	 		C.comment_no = #{no}
+	 </select>
+	 
+	 <!-- 
+	 	void deleteComment(@Param("no") int commentNo);
+	  -->
+	 <delete id="deleteComment">
+	 	delete from
+	 		spring_board_comments
+	 	where
+	 		comment_no = #{no}
+	 </delete>
+	
+	<!-- 
 		void insertComment(@Param("comment") Comment comment);
 	 -->
 	<insert id="insertComment">
@@ -39,6 +69,7 @@
 	 		, C.comment_title				as title
 	 		, C.comment_content				as content
 	 		, C.comment_created_date		as createdDate
+	 		, C.board_no					as "board.no"
 	 		, U.user_no						as "user.no"
 	 		, U.user_nickname				as "user.nickname"
 	 	from

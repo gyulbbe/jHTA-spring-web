@@ -119,11 +119,33 @@
 <script type="text/javascript">
 	const commentFormModal = new bootstrap.Modal('#modal-comment-form');
 	
+	async function removeComment(commentNo) {
+		let response = await fetch("/ajax/delComment/" + commentNo);
+		let result = await response.text();
+		if (result === 'success') {
+			let div = document.querySelector("#comment-" + commentNo);
+			div.remove();
+		} else if (result === 'fail') {
+			alert('댓글을 삭제할 수 없습니다.');
+		}
+	}
+	
 	async function getComments() {
 		let boardNo = document.querySelector("input[name=boardNo]").value;
 		
-		let response = await fetch("/board/comments/" + boardNo);
-		let comments = await response.json();
+		let response = await fetch("/ajax/comments/" + boardNo);
+		let result = await response.json();
+		/*
+			result -> {
+				status: 200,
+				message: "성공",
+				data: [
+					{"no":1, "title":"댓글연습2", "content":"연습",...}
+					{"no":1, "title":"댓글연습2", "content":"연습",...}
+				]
+			}
+		*/
+		let comments = result.data;
 		for (let comment of comments) {
 			appendComment(comment);
 		}
@@ -148,7 +170,7 @@
 		let jsonText = JSON.stringify(data);
 		
 		// POST 방식으로 JSON 형식의 데이터를 서버로 보내기
-		let response = await fetch("/board/addComment", {
+		let response = await fetch("/ajax/addComment", {
 			// 요청방식을 지정한다.
 			method: "POST",
 			// 요청메시지의 바디부에 포함된 컨텐츠의 형식을 지정한다.

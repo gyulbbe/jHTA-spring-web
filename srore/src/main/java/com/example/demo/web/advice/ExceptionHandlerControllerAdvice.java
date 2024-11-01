@@ -14,10 +14,10 @@ import com.example.demo.exception.StoreException;
 @ControllerAdvice
 public class ExceptionHandlerControllerAdvice {
 	
-	@ExceptionHandler(Exception.class)
-	public String hadleException(Exception e) {
-		return "error/server-error";
-	}
+//	@ExceptionHandler(Exception.class)
+//	public String hadleException(Exception e) {
+//		return "error/server-error";
+//	}
 	
 	@ExceptionHandler(StoreException.class)
 	public String handleStoreException(StoreException e, Model model) {

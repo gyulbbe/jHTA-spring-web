@@ -12,4 +12,6 @@ public interface CommentMapper {
 
 	void insertComment(@Param("comment") Comment comment);
 	List<Comment> getCommentsByBoardNo(@Param("boardNo") int boardNo);
+	Comment getCommentByBoardNo(@Param("no") int commentNo);
+	void deleteComment(@Param("no") int commentNo);
 }

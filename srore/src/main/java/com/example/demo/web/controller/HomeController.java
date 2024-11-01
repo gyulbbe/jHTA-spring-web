@@ -7,7 +7,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.example.demo.Service.UserService;
 import com.example.demo.dto.UserRegisterForm;
@@ -68,12 +67,5 @@ public class HomeController {
 		
 		return "redirect:/home";
 	}
-	
-	@GetMapping("/check-email")
-	@ResponseBody
-	public String emailCheck(String email) {
-		System.out.println("전달받은 email: " + email);
-		boolean isExist = userService.isExistEmail(email);
-		return isExist ? "exists" : "none";
-	}
+
 }
