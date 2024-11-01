@@ -1,5 +1,6 @@
 package com.example.demo.security;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -14,6 +15,9 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableMethodSecurity(prePostEnabled = true, securedEnabled = true)
 
 public class SecurityConfig {
+	
+	@Autowired
+	private CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
 	
 	@Bean
 	SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -49,7 +53,9 @@ public class SecurityConfig {
         			// 로그아웃 성공시 이동할 URL을 지정한다.
         			.logoutSuccessUrl("/home")
         			// 세션객체를 무효화시킨다.
-        			.invalidateHttpSession(true));
+        			.invalidateHttpSession(true))
+        	.exceptionHandling(exceptionHandling -> exceptionHandling.authenticationEntryPoint(customAuthenticationEntryPoint));
+        	;
      return http.build();
 	}
 	

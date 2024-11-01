@@ -121,13 +121,31 @@
 	
 	async function removeComment(commentNo) {
 		let response = await fetch("/ajax/delComment/" + commentNo);
-		let result = await response.text();
-		if (result === 'success') {
+		if (response.ok) {
 			let div = document.querySelector("#comment-" + commentNo);
 			div.remove();
-		} else if (result === 'fail') {
-			alert('댓글을 삭제할 수 없습니다.');
+		} else {
+			let result = await response.json();
+			/*
+				result -> {
+					status: 500,
+					message: "다른 사람의 댓글은 삭제할 수 없습니다.",
+					data: null
+				}
+				result -> {
+					status: 401,
+					message: "로그인이 필요한 서비스입니다.",
+					data: null
+				}
+			*/
+			let errorMessage = result.message;
+			alert(errorMessage);
 		}
+		
+		
+		console.log('요청 성공여부', response.ok)
+		console.log('성공여부', result);
+		
 	}
 	
 	async function getComments() {

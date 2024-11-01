@@ -29,7 +29,7 @@ public class RestResponseDto<T> {
 	public static <T> RestResponseDto<T> success(T data) {
 		RestResponseDto<T> dto = new RestResponseDto<>();
 		dto.setStatus(HttpServletResponse.SC_OK);
-		dto.setMessage("성공");
+		dto.setMessage("success");
 		dto.setData(data);
 		
 		return dto;

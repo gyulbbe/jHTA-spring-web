@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.example.demo.dto.CommentRegisterForm;
 import com.example.demo.dto.ListDto;
+import com.example.demo.exception.RestStoreException;
 import com.example.demo.exception.StoreException;
 import com.example.demo.mapper.BoardMapper;
 import com.example.demo.mapper.CommentMapper;
@@ -91,7 +92,7 @@ public class BoardService {
 	public void deleteComment(int commentNo, int userNo) {
 		Comment comment = commentMapper.getCommentByBoardNo(commentNo);
 		if (comment.getUser().getNo() != userNo) {
-			throw new StoreException("다른 사람이 작성한 댓글은 삭제할 수 없습니다.");
+			throw new RestStoreException("다른 사람이 작성한 댓글은 삭제할 수 없습니다.");
 		}
 		commentMapper.deleteComment(commentNo);
 	}

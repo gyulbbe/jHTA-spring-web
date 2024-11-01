@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.demo.Service.BoardService;
 import com.example.demo.dto.CommentRegisterForm;
 import com.example.demo.dto.RestResponseDto;
-import com.example.demo.exception.StoreException;
 import com.example.demo.security.LoginUser;
 import com.example.demo.vo.Comment;
 
@@ -29,14 +28,12 @@ public class RestBoardController {
 	
 	@PreAuthorize("isAuthenticated()")
 	@GetMapping("/delComment/{no}")
-	public String deleteComment(@PathVariable("no") int commentNo,
+	public ResponseEntity<RestResponseDto<String>>
+		deleteComment(@PathVariable("no") int commentNo,
 			@AuthenticationPrincipal LoginUser loginUser) {
-		try {
-			boardService.deleteComment(commentNo, loginUser.getNo());
-			return "success";
-		} catch (StoreException e) {
-			return "fail";
-		}
+				boardService.deleteComment(commentNo, loginUser.getNo());
+				
+				return ResponseEntity.ok(RestResponseDto.success("success"));
 	}
 	
 	@GetMapping("/comments/{no}")
