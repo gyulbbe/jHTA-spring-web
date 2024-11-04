@@ -49,7 +49,7 @@ public class SecurityConfig {
         				// 로그인 성공시 이동할 URL을 지정한다.
         				.defaultSuccessUrl("/home")
         				// 로그인 실패시 이동할 URL을 지정한다.
-        				.failureUrl("/login?error"))
+        				.failureUrl("/login?error=fail"))
         	.logout(logout -> logout
         			// 로그아웃 요청 URL을 지정한다.
         			.logoutUrl("/logout")

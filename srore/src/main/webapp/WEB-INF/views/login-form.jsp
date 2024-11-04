@@ -26,9 +26,25 @@
 						<div class="border p-2 bg-dark text-white fw-bold">로그인</div>
 					</div>
 				</div>
-				
 				<div class="row mb-3">
 					<div class="col">
+					<c:choose>
+						<c:when test="${param.error eq 'fail' }">
+						<div class="alert alert-danger">
+							이메일 혹은 비밀번호가 일치하지 않습니다.
+						</div>
+						</c:when>
+						<c:when test="${param.error eq 'required' }">
+						<div class="alert alert-danger">
+							로그인 후 이용가능한 서비스를 요청하였습니다.
+						</div>
+						</c:when>
+						<c:when test="${param.error eq 'access-denied' }">
+						<div class="alert alert-danger">
+							접근권한이 필요한 서비스를 요청하였습니다.
+						</div>
+						</c:when>
+					</c:choose>
 						<div class="border p-2 bg-light">
 							<form id="form-login" method="post" action="login" novalidate="novalidate">
 								<div class="mb-3">
